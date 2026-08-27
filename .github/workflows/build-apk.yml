@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   build:
-    name: Build APK and AAB
+    name: Build Calculator Android
     runs-on: ubuntu-latest
 
     steps:
@@ -30,19 +30,20 @@ jobs:
       - name: Accept Android SDK licenses
         run: yes | sdkmanager --licenses || true
 
-      - name: Check Gradle Wrapper
+      - name: Install Gradle 9.3.1
         run: |
-          echo "Checking Gradle Wrapper..."
-          ls -la
-          test -f ./gradlew
-          test -f ./gradle/wrapper/gradle-wrapper.properties
-          echo "Gradle Wrapper found."
+          wget -q https://services.gradle.org/distributions/gradle-9.3.1-bin.zip
+          unzip -q gradle-9.3.1-bin.zip -d "$HOME"
+          echo "$HOME/gradle-9.3.1/bin" >> "$GITHUB_PATH"
 
-      - name: Make Gradle executable
-        run: chmod +x ./gradlew
+      - name: Generate Gradle Wrapper
+        run: |
+          gradle wrapper --gradle-version 9.3.1 --distribution-type bin
 
-      - name: Verify Gradle version
-        run: ./gradlew --version
+      - name: Verify Gradle Wrapper
+        run: |
+          chmod +x ./gradlew
+          ./gradlew --version
 
       - name: Build Debug APK
         run: ./gradlew assembleDebug --stacktrace
