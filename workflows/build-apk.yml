@@ -30,6 +30,14 @@ jobs:
       - name: Accept Android SDK licenses
         run: yes | sdkmanager --licenses || true
 
+      - name: Check Gradle Wrapper
+        run: |
+          echo "Checking Gradle Wrapper..."
+          ls -la
+          test -f ./gradlew
+          test -f ./gradle/wrapper/gradle-wrapper.properties
+          echo "Gradle Wrapper found."
+
       - name: Make Gradle executable
         run: chmod +x ./gradlew
 
