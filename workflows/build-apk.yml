@@ -1,10 +1,15 @@
-name: Build Calculator Android
+- name: Verify Gradle Wrapper
+  run: |
+    echo "=== Gradle wrapper properties ==="
+    cat gradle/wrapper/gradle-wrapper.properties
 
-on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
+    echo "=== Gradle wrapper files ==="
+    ls -la gradle/wrapper
+    ls -la ./gradlew
+
+    echo "=== Gradle version ==="
+    chmod +x ./gradlew
+    ./gradlew --version
 
 permissions:
   contents: read
