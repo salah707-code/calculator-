@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build Calculator Android
 
 on:
   workflow_dispatch:
@@ -6,16 +6,19 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   build:
-    name: Build APK
+    name: Build Release APK & AAB
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Setup JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -25,14 +28,49 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
+      - name: Accept Android SDK licenses
+        run: yes | sdkmanager --licenses || true
+
       - name: Make Gradle executable
         run: chmod +x ./gradlew
 
-      - name: Build Debug APK
-        run: ./gradlew assembleDebug
+      - name: Verify Gradle
+        run: ./gradlew --version
 
-      - name: Upload APK
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Build Release APK
+        run: ./gradlew assembleRelease --stacktrace
+
+      - name: Build Release AAB
+        run: ./gradlew bundleRelease --stacktrace
+
+      - name: Find build outputs
+        run: |
+          echo "=== APK files ==="
+          find app/build/outputs/apk -type f -name "*.apk" -print || true
+
+          echo "=== AAB files ==="
+          find app/build/outputs/bundle -type f -name "*.aab" -print || true
+
+      - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
           name: calculator-debug-apk
           path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+
+      - name: Upload Release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: calculator-release-apk
+          path: app/build/outputs/apk/release/*.apk
+          if-no-files-found: error
+
+      - name: Upload Release AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: calculator-release-aab
+          path: app/build/outputs/bundle/release/*.aab
+          if-no-files-found: error
