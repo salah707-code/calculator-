@@ -11,13 +11,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import com.example.model.AccentColor
 import com.example.model.AppTheme
 
-private val DarkColorScheme = darkColorScheme(
-    primary = CleanBlue,
-    onPrimary = DarkNumKeyText,
-    primaryContainer = CleanBlueDark,
-    onPrimaryContainer = CleanBlueSoft,
+fun createDarkColorScheme(accentColor: AccentColor) = darkColorScheme(
+    primary = accentColor.darkColor,
+    onPrimary = Color.White,
+    primaryContainer = accentColor.darkSoft,
+    onPrimaryContainer = accentColor.darkColor,
     secondary = DarkUtilityKeyBg,
     onSecondary = DarkUtilityKeyText,
     background = DarkBg,
@@ -30,11 +31,11 @@ private val DarkColorScheme = darkColorScheme(
     error = CleanRedDark
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = CleanBlue,
-    onPrimary = Color(0xFFFFFFFF),
-    primaryContainer = CleanBlueSoft,
-    onPrimaryContainer = CleanBlue,
+fun createLightColorScheme(accentColor: AccentColor) = lightColorScheme(
+    primary = accentColor.color,
+    onPrimary = Color.White,
+    primaryContainer = accentColor.lightSoft,
+    onPrimaryContainer = accentColor.color,
     secondary = LightUtilityKeyBg,
     onSecondary = LightUtilityKeyText,
     background = LightBg,
@@ -50,6 +51,7 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun CalculatorTheme(
     appTheme: AppTheme = AppTheme.SYSTEM,
+    accentColor: AccentColor = AccentColor.BLUE,
     content: @Composable () -> Unit
 ) {
     val darkTheme = when (appTheme) {
@@ -58,7 +60,7 @@ fun CalculatorTheme(
         AppTheme.DARK -> true
     }
 
-    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+    val colorScheme = if (darkTheme) createDarkColorScheme(accentColor) else createLightColorScheme(accentColor)
 
     val view = LocalView.current
     if (!view.isInEditMode) {

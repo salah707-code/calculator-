@@ -2,6 +2,7 @@ package com.example.data.local
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.example.model.AccentColor
 import com.example.model.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,6 +14,9 @@ class PreferencesRepository(context: Context) {
 
     private val _themeMode = MutableStateFlow(loadTheme())
     val themeMode: StateFlow<AppTheme> = _themeMode.asStateFlow()
+
+    private val _accentColor = MutableStateFlow(loadAccentColor())
+    val accentColor: StateFlow<AccentColor> = _accentColor.asStateFlow()
 
     private val _hapticEnabled = MutableStateFlow(prefs.getBoolean(KEY_HAPTIC, true))
     val hapticEnabled: StateFlow<Boolean> = _hapticEnabled.asStateFlow()
@@ -26,6 +30,11 @@ class PreferencesRepository(context: Context) {
     fun setTheme(theme: AppTheme) {
         prefs.edit().putString(KEY_THEME, theme.name).apply()
         _themeMode.value = theme
+    }
+
+    fun setAccentColor(accent: AccentColor) {
+        prefs.edit().putString(KEY_ACCENT, accent.name).apply()
+        _accentColor.value = accent
     }
 
     fun setHapticEnabled(enabled: Boolean) {
@@ -52,8 +61,18 @@ class PreferencesRepository(context: Context) {
         }
     }
 
+    private fun loadAccentColor(): AccentColor {
+        val name = prefs.getString(KEY_ACCENT, AccentColor.BLUE.name) ?: AccentColor.BLUE.name
+        return try {
+            AccentColor.valueOf(name)
+        } catch (e: Exception) {
+            AccentColor.BLUE
+        }
+    }
+
     companion object {
         private const val KEY_THEME = "pref_theme"
+        private const val KEY_ACCENT = "pref_accent_color"
         private const val KEY_HAPTIC = "pref_haptic"
         private const val KEY_SOUND = "pref_sound"
         private const val KEY_THOUSANDS_SEP = "pref_thousands_sep"

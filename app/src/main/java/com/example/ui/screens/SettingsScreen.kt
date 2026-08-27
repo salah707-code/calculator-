@@ -1,7 +1,10 @@
 package com.example.ui.screens
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,10 +15,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.ColorLens
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.DeleteSweep
 import androidx.compose.material.icons.filled.FormatListNumbered
@@ -48,6 +54,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -55,16 +63,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.R
+import com.example.model.AccentColor
 import com.example.model.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     currentTheme: AppTheme,
+    currentAccentColor: AccentColor,
     hapticEnabled: Boolean,
     soundEnabled: Boolean,
     thousandsSeparatorEnabled: Boolean,
     onThemeChange: (AppTheme) -> Unit,
+    onAccentColorChange: (AccentColor) -> Unit,
     onHapticChange: (Boolean) -> Unit,
     onSoundChange: (Boolean) -> Unit,
     onThousandsSeparatorChange: (Boolean) -> Unit,
@@ -192,6 +203,80 @@ fun SettingsScreen(
                             icon = Icons.Default.DarkMode,
                             selected = currentTheme == AppTheme.DARK,
                             onClick = { onThemeChange(AppTheme.DARK) },
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+            }
+
+            // Accent Color Customization Section
+            SettingsSectionHeader(
+                icon = Icons.Default.ColorLens,
+                title = stringResource(R.string.settings_accent_color)
+            )
+
+            Card(
+                shape = RoundedCornerShape(18.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = stringResource(R.string.settings_accent_color_desc),
+                        fontSize = 13.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.85f)
+                    )
+
+                    Spacer(modifier = Modifier.height(14.dp))
+
+                    // Row 1: BLUE, EMERALD, PURPLE
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        AccentColorOptionCard(
+                            accent = AccentColor.BLUE,
+                            selected = currentAccentColor == AccentColor.BLUE,
+                            onClick = { onAccentColorChange(AccentColor.BLUE) },
+                            modifier = Modifier.weight(1f)
+                        )
+                        AccentColorOptionCard(
+                            accent = AccentColor.EMERALD,
+                            selected = currentAccentColor == AccentColor.EMERALD,
+                            onClick = { onAccentColorChange(AccentColor.EMERALD) },
+                            modifier = Modifier.weight(1f)
+                        )
+                        AccentColorOptionCard(
+                            accent = AccentColor.PURPLE,
+                            selected = currentAccentColor == AccentColor.PURPLE,
+                            onClick = { onAccentColorChange(AccentColor.PURPLE) },
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    // Row 2: ORANGE, ROSE, TEAL
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        AccentColorOptionCard(
+                            accent = AccentColor.ORANGE,
+                            selected = currentAccentColor == AccentColor.ORANGE,
+                            onClick = { onAccentColorChange(AccentColor.ORANGE) },
+                            modifier = Modifier.weight(1f)
+                        )
+                        AccentColorOptionCard(
+                            accent = AccentColor.ROSE,
+                            selected = currentAccentColor == AccentColor.ROSE,
+                            onClick = { onAccentColorChange(AccentColor.ROSE) },
+                            modifier = Modifier.weight(1f)
+                        )
+                        AccentColorOptionCard(
+                            accent = AccentColor.TEAL,
+                            selected = currentAccentColor == AccentColor.TEAL,
+                            onClick = { onAccentColorChange(AccentColor.TEAL) },
                             modifier = Modifier.weight(1f)
                         )
                     }
@@ -326,6 +411,67 @@ fun SettingsScreen(
             }
 
             Spacer(modifier = Modifier.height(24.dp))
+        }
+    }
+}
+
+@Composable
+fun AccentColorOptionCard(
+    accent: AccentColor,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val backgroundColor = if (selected) {
+        MaterialTheme.colorScheme.surface
+    } else {
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.5f)
+    }
+
+    Card(
+        onClick = onClick,
+        shape = RoundedCornerShape(14.dp),
+        colors = CardDefaults.cardColors(containerColor = backgroundColor),
+        border = BorderStroke(
+            if (selected) 2.dp else 1.dp,
+            if (selected) accent.color else MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = if (selected) 2.dp else 0.dp),
+        modifier = modifier.testTag("accent_${accent.name.lowercase()}")
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 10.dp, horizontal = 6.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(28.dp)
+                    .clip(CircleShape)
+                    .background(accent.color),
+                contentAlignment = Alignment.Center
+            ) {
+                if (selected) {
+                    Icon(
+                        imageVector = Icons.Default.Check,
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            Text(
+                text = stringResource(accent.titleRes),
+                fontSize = 12.sp,
+                fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
+                color = if (selected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1
+            )
         }
     }
 }

@@ -172,12 +172,12 @@ fun TopActionBar(
                 modifier = Modifier
                     .size(34.dp)
                     .clip(RoundedCornerShape(10.dp))
-                    .background(CleanBlue),
+                    .background(MaterialTheme.colorScheme.primary),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "±",
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     fontSize = 17.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -468,11 +468,18 @@ fun KeypadGrid(
             )
         }
 
-        // Row 5: 00 | 0 | 000 | ±
+        // Row 5: 000 | 00 | 0 | ±  (Right to Left: 0, 00, 000)
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
+            CalculatorKeyButton(
+                key = CalculatorKey.TripleZero,
+                keyType = KeyType.NUMBER,
+                onClick = { onKeyClick(CalculatorKey.TripleZero) },
+                isDarkTheme = isDarkTheme,
+                modifier = Modifier.weight(1f).height(62.dp)
+            )
             CalculatorKeyButton(
                 key = CalculatorKey.DoubleZero,
                 keyType = KeyType.NUMBER,
@@ -484,13 +491,6 @@ fun KeypadGrid(
                 key = CalculatorKey.Digit("0"),
                 keyType = KeyType.NUMBER,
                 onClick = { onKeyClick(CalculatorKey.Digit("0")) },
-                isDarkTheme = isDarkTheme,
-                modifier = Modifier.weight(1f).height(62.dp)
-            )
-            CalculatorKeyButton(
-                key = CalculatorKey.TripleZero,
-                keyType = KeyType.NUMBER,
-                onClick = { onKeyClick(CalculatorKey.TripleZero) },
                 isDarkTheme = isDarkTheme,
                 modifier = Modifier.weight(1f).height(62.dp)
             )

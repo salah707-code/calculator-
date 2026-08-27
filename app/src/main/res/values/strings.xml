@@ -28,6 +28,14 @@
     <string name="theme_system">تلقائي حسب النظام</string>
     <string name="theme_light">الوضع الفاتح</string>
     <string name="theme_dark">الوضع الداكن</string>
+    <string name="settings_accent_color">لون التمييز (Accent Color)</string>
+    <string name="settings_accent_color_desc">تخصيص لون زر النتيجة والعناصر التفاعلية</string>
+    <string name="accent_blue">الأزرق الملكي</string>
+    <string name="accent_emerald">الزمردي</string>
+    <string name="accent_purple">البنفسجي</string>
+    <string name="accent_orange">البرتقالي</string>
+    <string name="accent_rose">الوردي التوتي</string>
+    <string name="accent_teal">الفيروزي</string>
     
     <string name="settings_feedback_section">التفاعل والملاحظات</string>
     <string name="settings_vibration">الاهتزاز (Haptic Feedback)</string>

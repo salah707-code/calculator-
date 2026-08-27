@@ -74,11 +74,11 @@ fun CalculatorKeyButton(
     val containerColor: Color = when {
         isAllClear -> if (isDarkTheme) CleanRedSoftDark else CleanRedSoft
         keyType == KeyType.OPERATOR -> if (isActiveOperator) {
-            if (isDarkTheme) DarkOperatorKeyActiveBg else LightOperatorKeyActiveBg
+            MaterialTheme.colorScheme.primary
         } else {
-            if (isDarkTheme) DarkOperatorKeyBg else LightOperatorKeyBg
+            if (isDarkTheme) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.35f) else MaterialTheme.colorScheme.primaryContainer
         }
-        keyType == KeyType.EQUALS -> CleanBlue
+        keyType == KeyType.EQUALS -> MaterialTheme.colorScheme.primary
         keyType == KeyType.UTILITY -> if (isDarkTheme) DarkUtilityKeyBg else LightUtilityKeyBg
         else -> if (isDarkTheme) DarkNumKeyBg else LightNumKeyBg
     }
@@ -86,11 +86,11 @@ fun CalculatorKeyButton(
     val contentColor: Color = when {
         isAllClear -> if (isDarkTheme) CleanRedDark else CleanRed
         keyType == KeyType.OPERATOR -> if (isActiveOperator) {
-            if (isDarkTheme) DarkOperatorKeyActiveText else LightOperatorKeyActiveText
+            MaterialTheme.colorScheme.onPrimary
         } else {
-            if (isDarkTheme) DarkOperatorKeyText else LightOperatorKeyText
+            MaterialTheme.colorScheme.primary
         }
-        keyType == KeyType.EQUALS -> Color.White
+        keyType == KeyType.EQUALS -> MaterialTheme.colorScheme.onPrimary
         keyType == KeyType.UTILITY -> if (isDarkTheme) DarkUtilityKeyText else LightUtilityKeyText
         else -> if (isDarkTheme) DarkNumKeyText else LightNumKeyText
     }

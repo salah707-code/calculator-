@@ -20,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.example.model.AccentColor
 import com.example.model.AppTheme
 import com.example.ui.CalculatorViewModel
 import com.example.ui.screens.CalculatorScreen
@@ -43,8 +44,9 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val themeMode by viewModel.themeMode.collectAsState()
+            val accentColor by viewModel.accentColor.collectAsState()
 
-            CalculatorTheme(appTheme = themeMode) {
+            CalculatorTheme(appTheme = themeMode, accentColor = accentColor) {
                 MainAppContent(viewModel = viewModel)
             }
         }
@@ -58,6 +60,7 @@ fun MainAppContent(viewModel: CalculatorViewModel) {
     val uiState by viewModel.uiState.collectAsState()
     val historyList by viewModel.historyList.collectAsState()
     val themeMode by viewModel.themeMode.collectAsState()
+    val accentColor by viewModel.accentColor.collectAsState()
     val hapticEnabled by viewModel.hapticEnabled.collectAsState()
     val soundEnabled by viewModel.soundEnabled.collectAsState()
     val thousandsSeparatorEnabled by viewModel.thousandsSeparatorEnabled.collectAsState()
@@ -115,10 +118,12 @@ fun MainAppContent(viewModel: CalculatorViewModel) {
             CurrentDestination.SETTINGS -> {
                 SettingsScreen(
                     currentTheme = themeMode,
+                    currentAccentColor = accentColor,
                     hapticEnabled = hapticEnabled,
                     soundEnabled = soundEnabled,
                     thousandsSeparatorEnabled = thousandsSeparatorEnabled,
                     onThemeChange = { theme -> viewModel.setTheme(theme) },
+                    onAccentColorChange = { accent -> viewModel.setAccentColor(accent) },
                     onHapticChange = { enabled -> viewModel.setHaptic(enabled) },
                     onSoundChange = { enabled -> viewModel.setSound(enabled) },
                     onThousandsSeparatorChange = { enabled -> viewModel.setThousandsSeparator(enabled) },

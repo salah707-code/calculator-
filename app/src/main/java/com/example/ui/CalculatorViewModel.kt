@@ -8,6 +8,7 @@ import com.example.data.local.AppDatabase
 import com.example.data.local.HistoryRepository
 import com.example.data.local.PreferencesRepository
 import com.example.engine.CalculatorEngine
+import com.example.model.AccentColor
 import com.example.model.AppTheme
 import com.example.model.CalculationHistory
 import com.example.model.CalculatorKey
@@ -38,6 +39,7 @@ class CalculatorViewModel(application: Application) : AndroidViewModel(applicati
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     val themeMode: StateFlow<AppTheme> = preferencesRepository.themeMode
+    val accentColor: StateFlow<AccentColor> = preferencesRepository.accentColor
     val hapticEnabled: StateFlow<Boolean> = preferencesRepository.hapticEnabled
     val soundEnabled: StateFlow<Boolean> = preferencesRepository.soundEnabled
     val thousandsSeparatorEnabled: StateFlow<Boolean> = preferencesRepository.thousandsSeparatorEnabled
@@ -87,6 +89,10 @@ class CalculatorViewModel(application: Application) : AndroidViewModel(applicati
 
     fun setTheme(theme: AppTheme) {
         preferencesRepository.setTheme(theme)
+    }
+
+    fun setAccentColor(accent: AccentColor) {
+        preferencesRepository.setAccentColor(accent)
     }
 
     fun setHaptic(enabled: Boolean) {
